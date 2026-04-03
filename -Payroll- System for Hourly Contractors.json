@@ -1,0 +1,969 @@
+{
+    "name": "\"Payroll\" System for Hourly Contractors",
+    "flow": [
+        {
+            "id": 1,
+            "module": "harvest:getUsers",
+            "version": 2,
+            "parameters": {
+                "__IMTCONN__": 231842
+            },
+            "mapper": {
+                "limit": "50",
+                "is_active": true
+            },
+            "metadata": {
+                "designer": {
+                    "x": -451,
+                    "y": 131,
+                    "name": "List Active Users"
+                },
+                "restore": {
+                    "expect": {
+                        "is_active": {
+                            "mode": "chose",
+                            "label": "Only active"
+                        }
+                    },
+                    "parameters": {
+                        "__IMTCONN__": {
+                            "data": {
+                                "scoped": "true",
+                                "connection": "harvest2"
+                            },
+                            "label": "1SecondCopy (info@1secondcopy.com)"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "__IMTCONN__",
+                        "type": "account:harvest2",
+                        "label": "Connection",
+                        "required": true
+                    }
+                ],
+                "expect": [
+                    {
+                        "name": "limit",
+                        "type": "uinteger",
+                        "label": "Number of users to return"
+                    },
+                    {
+                        "name": "is_active",
+                        "type": "select",
+                        "label": "Active or inactive",
+                        "validate": {
+                            "enum": [
+                                true,
+                                false
+                            ]
+                        }
+                    },
+                    {
+                        "name": "updated_since",
+                        "time": true,
+                        "type": "date",
+                        "label": "Updated since"
+                    }
+                ]
+            }
+        },
+        {
+            "id": 2,
+            "module": "util:Switcher",
+            "version": 1,
+            "parameters": {},
+            "mapper": {
+                "input": "{{formatDate(now; \"DD\")}}",
+                "casesTable": [
+                    {
+                        "output": "{{formatDate(now; \"YYYY-MM\")}}-01",
+                        "pattern": "16"
+                    },
+                    {
+                        "output": "{{formatDate(addMonths(now; -1); \"YYYY-MM\")}}-16",
+                        "pattern": "01"
+                    }
+                ],
+                "elseOutput": "",
+                "useRegExpMatch": false
+            },
+            "metadata": {
+                "designer": {
+                    "x": -158,
+                    "y": 130,
+                    "name": "Set Pay-Period Dates"
+                },
+                "restore": {
+                    "expect": {
+                        "casesTable": {
+                            "mode": "chose",
+                            "items": [
+                                null,
+                                null
+                            ]
+                        }
+                    }
+                },
+                "expect": [
+                    {
+                        "name": "input",
+                        "type": "text",
+                        "label": "Input"
+                    },
+                    {
+                        "name": "useRegExpMatch",
+                        "type": "boolean",
+                        "label": "Use regular expressions to match",
+                        "required": true
+                    },
+                    {
+                        "name": "casesTable",
+                        "spec": [
+                            {
+                                "name": "pattern",
+                                "type": "text",
+                                "label": "Pattern"
+                            },
+                            {
+                                "name": "output",
+                                "type": "any",
+                                "label": "Output"
+                            }
+                        ],
+                        "type": "array",
+                        "label": "Cases",
+                        "required": true
+                    },
+                    {
+                        "name": "elseOutput",
+                        "type": "any",
+                        "label": "Else"
+                    }
+                ]
+            }
+        },
+        {
+            "id": 3,
+            "module": "harvest:getAUser",
+            "version": 2,
+            "parameters": {
+                "__IMTCONN__": 231842
+            },
+            "filter": {
+                "name": "Switch Successful",
+                "conditions": [
+                    [
+                        {
+                            "a": "{{2.isElse}}",
+                            "b": "{{false}}",
+                            "o": "boolean:equal"
+                        }
+                    ]
+                ]
+            },
+            "mapper": {
+                "user_id": "{{1.id}}"
+            },
+            "metadata": {
+                "designer": {
+                    "x": 182,
+                    "y": 130,
+                    "name": "Get User Record"
+                },
+                "restore": {
+                    "expect": {
+                        "user_id": {
+                            "mode": "edit"
+                        }
+                    },
+                    "parameters": {
+                        "__IMTCONN__": {
+                            "data": {
+                                "scoped": "true",
+                                "connection": "harvest2"
+                            },
+                            "label": "1SecondCopy (info@1secondcopy.com)"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "__IMTCONN__",
+                        "type": "account:harvest2",
+                        "label": "Connection",
+                        "required": true
+                    }
+                ],
+                "expect": [
+                    {
+                        "mode": "edit",
+                        "name": "user_id",
+                        "type": "select",
+                        "label": "User ID",
+                        "required": true
+                    }
+                ]
+            }
+        },
+        {
+            "id": 5,
+            "module": "harvest:getTimeEntries",
+            "version": 2,
+            "parameters": {
+                "__IMTCONN__": 231842
+            },
+            "mapper": {
+                "to": "{{formatDate(addDays(now; -1); \"YYYY-MM-DD\")}}",
+                "from": "{{2.output}}",
+                "limit": "1500",
+                "user_id": "{{3.id}}"
+            },
+            "metadata": {
+                "designer": {
+                    "x": 469,
+                    "y": 130,
+                    "name": "List Pay-Period Time Entries"
+                },
+                "restore": {
+                    "expect": {
+                        "user_id": {
+                            "mode": "edit"
+                        },
+                        "client_id": {
+                            "mode": "edit"
+                        },
+                        "is_billed": {
+                            "mode": "chose",
+                            "label": "Show both"
+                        },
+                        "is_running": {
+                            "mode": "chose",
+                            "label": "Show both"
+                        },
+                        "project_id": {
+                            "mode": "edit"
+                        }
+                    },
+                    "parameters": {
+                        "__IMTCONN__": {
+                            "data": {
+                                "scoped": "true",
+                                "connection": "harvest2"
+                            },
+                            "label": "1SecondCopy (info@1secondcopy.com)"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "__IMTCONN__",
+                        "type": "account:harvest2",
+                        "label": "Connection",
+                        "required": true
+                    }
+                ],
+                "expect": [
+                    {
+                        "name": "limit",
+                        "type": "uinteger",
+                        "label": "Number of time entries to return"
+                    },
+                    {
+                        "name": "is_billed",
+                        "type": "select",
+                        "label": "Invoiced or Not invoiced",
+                        "validate": {
+                            "enum": [
+                                true,
+                                false
+                            ]
+                        }
+                    },
+                    {
+                        "name": "is_running",
+                        "type": "select",
+                        "label": "Running or Non-running",
+                        "validate": {
+                            "enum": [
+                                true,
+                                false
+                            ]
+                        }
+                    },
+                    {
+                        "mode": "edit",
+                        "name": "user_id",
+                        "type": "select",
+                        "label": "User ID"
+                    },
+                    {
+                        "mode": "edit",
+                        "name": "client_id",
+                        "type": "select",
+                        "label": "Client ID"
+                    },
+                    {
+                        "mode": "edit",
+                        "name": "project_id",
+                        "type": "select",
+                        "label": "Project ID"
+                    },
+                    {
+                        "name": "updated_since",
+                        "time": true,
+                        "type": "date",
+                        "label": "Updated since"
+                    },
+                    {
+                        "name": "from",
+                        "time": false,
+                        "type": "date",
+                        "label": "From"
+                    },
+                    {
+                        "name": "to",
+                        "time": false,
+                        "type": "date",
+                        "label": "To"
+                    }
+                ]
+            }
+        },
+        {
+            "id": 7,
+            "module": "util:FunctionAggregator2",
+            "version": 1,
+            "parameters": {
+                "fn": "sum",
+                "feeder": 5
+            },
+            "filter": {
+                "name": "Total Entries =/= 0",
+                "conditions": [
+                    [
+                        {
+                            "a": "{{5.`__IMTLENGTH__`}}",
+                            "b": "0",
+                            "o": "number:notequal"
+                        }
+                    ]
+                ]
+            },
+            "mapper": {
+                "value": "{{5.hours}}"
+            },
+            "metadata": {
+                "designer": {
+                    "x": 777,
+                    "y": 131,
+                    "name": "Sum Hours"
+                },
+                "restore": {
+                    "extra": {
+                        "feeder": {
+                            "label": "Harvest - List Time Entries [14]"
+                        }
+                    },
+                    "parameters": {
+                        "fn": {
+                            "label": "SUM"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "fn",
+                        "type": "select",
+                        "label": "Aggregate function",
+                        "required": true,
+                        "validate": {
+                            "enum": [
+                                "avg",
+                                "sum",
+                                "count",
+                                "max",
+                                "min"
+                            ]
+                        }
+                    }
+                ],
+                "expect": [
+                    {
+                        "name": "value",
+                        "type": "number",
+                        "label": "Value"
+                    }
+                ]
+            }
+        },
+        {
+            "id": 8,
+            "module": "pandadoc:createADocuments",
+            "version": 1,
+            "parameters": {
+                "__IMTCONN__": 409238
+            },
+            "filter": {
+                "name": "=/= 0",
+                "conditions": [
+                    [
+                        {
+                            "a": "{{7.result}}",
+                            "o": "number:notequal",
+                            "b": "0"
+                        }
+                    ]
+                ]
+            },
+            "mapper": {
+                "name": "{{3.first_name}} {{3.last_name}} Invoice [{{formatDate(now; \"MMMM Do\")}}]",
+                "send": false,
+                "fields": {},
+                "tokens": {
+                    "Date": "{{formatDate(now; \"YYYY-MM-DD\")}}",
+                    "DueDate": "{{formatDate(addDays(now; 7); \"YYYY-MM-DD\")}}",
+                    "FromName": "{{3.first_name}} {{3.last_name}}",
+                    "FromEmail": "{{3.email}}",
+                    "InvoiceNo": "{{substring(formatDate(now; \"x\"); 0; 5)}}",
+                    "Client.Email": "{{3.email}}",
+                    "Sender.Email": "info@1secondcopy.com"
+                },
+                "template": "Pksi4owpN3ay2Wz2aRHWBT",
+                "folder_uuid": null,
+                "pricing_tables": [
+                    {
+                        "name": "Pricing Table 1",
+                        "options": {
+                            "currency": "USD",
+                            "discount": "0"
+                        },
+                        "sections": [
+                            {
+                                "rows": [
+                                    {
+                                        "data": {
+                                            "qty": "{{7.result}}",
+                                            "tax": "0",
+                                            "name": "Content Writing Services",
+                                            "price": "{{3.cost_rate}}",
+                                            "discount": "0"
+                                        },
+                                        "options": {
+                                            "optional": false,
+                                            "qty_editable": false,
+                                            "optional_selected": false
+                                        }
+                                    }
+                                ],
+                                "title": "Pricing Section",
+                                "default": true
+                            }
+                        ]
+                    }
+                ]
+            },
+            "metadata": {
+                "designer": {
+                    "x": 1078,
+                    "y": 131,
+                    "name": "Generate Contractor Invoice"
+                },
+                "restore": {
+                    "expect": {
+                        "tags": {
+                            "mode": "chose"
+                        },
+                        "images": {
+                            "mode": "chose"
+                        },
+                        "metadata": {
+                            "mode": "chose"
+                        },
+                        "template": {
+                            "mode": "chose",
+                            "label": "Contractor Invoice Template"
+                        },
+                        "recipients": {
+                            "mode": "chose"
+                        },
+                        "folder_uuid": {
+                            "mode": "chose"
+                        },
+                        "pricing_tables": {
+                            "mode": "chose",
+                            "items": [
+                                {
+                                    "name": {
+                                        "mode": "chose",
+                                        "label": "Pricing Table 1"
+                                    },
+                                    "sections": {
+                                        "mode": "chose",
+                                        "items": [
+                                            {
+                                                "rows": {
+                                                    "mode": "chose",
+                                                    "items": [
+                                                        {
+                                                            "options": {
+                                                                "nested": {
+                                                                    "optional": {
+                                                                        "mode": "chose"
+                                                                    },
+                                                                    "qty_editable": {
+                                                                        "mode": "chose"
+                                                                    },
+                                                                    "optional_selected": {
+                                                                        "mode": "chose"
+                                                                    }
+                                                                }
+                                                            },
+                                                            "custom_fields": {
+                                                                "mode": "chose"
+                                                            }
+                                                        }
+                                                    ]
+                                                },
+                                                "default": {
+                                                    "mode": "chose"
+                                                }
+                                            }
+                                        ]
+                                    }
+                                }
+                            ]
+                        },
+                        "content_placeholders": {
+                            "mode": "chose"
+                        }
+                    },
+                    "parameters": {
+                        "__IMTCONN__": {
+                            "data": {
+                                "scoped": "true",
+                                "connection": "pandadoc"
+                            },
+                            "label": "1SecondCopy (info@1secondcopy.com)"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "__IMTCONN__",
+                        "type": "account:pandadoc",
+                        "label": "Connection",
+                        "required": true
+                    }
+                ],
+                "expect": [
+                    {
+                        "name": "name",
+                        "type": "text",
+                        "label": "Document Name",
+                        "required": true
+                    },
+                    {
+                        "name": "template",
+                        "type": "select",
+                        "label": "Template ID",
+                        "required": true
+                    },
+                    {
+                        "name": "send",
+                        "type": "boolean",
+                        "label": "Send a document",
+                        "required": true
+                    },
+                    {
+                        "name": "folder_uuid",
+                        "type": "folder",
+                        "label": "Folder"
+                    },
+                    {
+                        "name": "tags",
+                        "spec": {
+                            "name": "value",
+                            "type": "text",
+                            "label": "Tag"
+                        },
+                        "type": "array",
+                        "label": "Tags"
+                    },
+                    {
+                        "name": "images",
+                        "spec": [
+                            {
+                                "name": "name",
+                                "type": "text",
+                                "label": "Image Block Name",
+                                "required": true
+                            },
+                            {
+                                "name": "urls",
+                                "type": "url",
+                                "label": "Image URL",
+                                "required": true
+                            }
+                        ],
+                        "type": "array",
+                        "label": "Images"
+                    },
+                    {
+                        "name": "metadata",
+                        "spec": [
+                            {
+                                "name": "key",
+                                "type": "text",
+                                "label": "Key",
+                                "required": true
+                            },
+                            {
+                                "name": "value",
+                                "type": "text",
+                                "label": "Value",
+                                "required": true
+                            }
+                        ],
+                        "type": "array",
+                        "label": "Document Metadata"
+                    },
+                    {
+                        "name": "content_placeholders",
+                        "spec": [
+                            {
+                                "name": "block_id",
+                                "type": "select",
+                                "label": "Block ID",
+                                "dynamic": true,
+                                "options": [],
+                                "required": true
+                            },
+                            {
+                                "name": "content_library_items",
+                                "spec": [
+                                    {
+                                        "name": "id",
+                                        "type": "select",
+                                        "label": "Content Library Item ID",
+                                        "dynamic": true,
+                                        "options": {
+                                            "store": []
+                                        },
+                                        "required": true
+                                    }
+                                ],
+                                "type": "array",
+                                "label": "Content Library Items",
+                                "required": true
+                            }
+                        ],
+                        "type": "array",
+                        "label": "Content Placeholders"
+                    },
+                    {
+                        "name": "tokens",
+                        "spec": [
+                            {
+                                "name": "Client.Email",
+                                "type": "email",
+                                "label": "Role: Client Email",
+                                "metadata": {
+                                    "role": "Client"
+                                }
+                            },
+                            {
+                                "name": "Sender.Email",
+                                "type": "email",
+                                "label": "Role: Sender Email",
+                                "metadata": {
+                                    "role": "Sender"
+                                }
+                            },
+                            {
+                                "name": "BillTo",
+                                "type": "text",
+                                "label": "Token: Bill To "
+                            },
+                            {
+                                "name": "Date",
+                                "type": "text",
+                                "label": "Token: Date "
+                            },
+                            {
+                                "name": "DueDate",
+                                "type": "text",
+                                "label": "Token: Due Date "
+                            },
+                            {
+                                "name": "From",
+                                "type": "text",
+                                "label": "Token: From "
+                            },
+                            {
+                                "name": "FromEmail",
+                                "type": "text",
+                                "label": "Token: From Email "
+                            },
+                            {
+                                "name": "FromName",
+                                "type": "text",
+                                "label": "Token: From Name "
+                            },
+                            {
+                                "name": "IdentifielContract",
+                                "type": "text",
+                                "label": "Token: Identifiel Contract "
+                            },
+                            {
+                                "name": "Invoce.No",
+                                "type": "text",
+                                "label": "Token: Invoce  No "
+                            },
+                            {
+                                "name": "Invoice.DueDate",
+                                "type": "text",
+                                "label": "Token: Invoice  Due Date "
+                            },
+                            {
+                                "name": "Invoice.Terms",
+                                "type": "text",
+                                "label": "Token: Invoice  Terms "
+                            },
+                            {
+                                "name": "InvoiceNo",
+                                "type": "text",
+                                "label": "Token: Invoice No "
+                            },
+                            {
+                                "name": "Service",
+                                "type": "text",
+                                "label": "Token: Service "
+                            }
+                        ],
+                        "type": "collection",
+                        "label": "Tokens"
+                    },
+                    {
+                        "name": "fields",
+                        "spec": [],
+                        "type": "collection",
+                        "label": "Fields"
+                    },
+                    {
+                        "name": "recipients",
+                        "spec": [
+                            {
+                                "name": "email",
+                                "type": "email",
+                                "label": "Email",
+                                "required": true
+                            },
+                            {
+                                "name": "first_name",
+                                "type": "text",
+                                "label": "First name"
+                            },
+                            {
+                                "name": "last_name",
+                                "type": "text",
+                                "label": "Last name"
+                            }
+                        ],
+                        "type": "array",
+                        "label": "CC Recipients"
+                    },
+                    {
+                        "name": "pricing_tables",
+                        "spec": [
+                            {
+                                "name": "name",
+                                "type": "select",
+                                "label": "Table Name",
+                                "options": [
+                                    {
+                                        "label": "Pricing Table 1",
+                                        "value": "Pricing Table 1"
+                                    }
+                                ],
+                                "required": true
+                            },
+                            {
+                                "name": "options",
+                                "spec": [
+                                    {
+                                        "name": "currency",
+                                        "type": "text",
+                                        "label": "Currency"
+                                    },
+                                    {
+                                        "name": "discount",
+                                        "type": "number",
+                                        "label": "Global Discount Percentage",
+                                        "validate": {
+                                            "max": 100,
+                                            "min": 0
+                                        }
+                                    },
+                                    {
+                                        "name": "tax_first",
+                                        "type": "number",
+                                        "label": "Global Tax Percentage",
+                                        "validate": {
+                                            "max": 100,
+                                            "min": 0
+                                        }
+                                    }
+                                ],
+                                "type": "collection",
+                                "label": "Options"
+                            },
+                            {
+                                "name": "sections",
+                                "spec": [
+                                    {
+                                        "name": "title",
+                                        "type": "text",
+                                        "label": "Section Name"
+                                    },
+                                    {
+                                        "name": "default",
+                                        "type": "boolean",
+                                        "label": "Default",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "rows",
+                                        "spec": [
+                                            {
+                                                "name": "options",
+                                                "spec": [
+                                                    {
+                                                        "name": "optional",
+                                                        "type": "boolean",
+                                                        "label": "Optional",
+                                                        "required": true
+                                                    },
+                                                    {
+                                                        "name": "optional_selected",
+                                                        "type": "boolean",
+                                                        "label": "Optional selected",
+                                                        "required": true
+                                                    },
+                                                    {
+                                                        "name": "qty_editable",
+                                                        "type": "boolean",
+                                                        "label": "Quantity editable",
+                                                        "required": true
+                                                    }
+                                                ],
+                                                "type": "collection",
+                                                "label": "Options"
+                                            },
+                                            {
+                                                "name": "data",
+                                                "spec": [
+                                                    {
+                                                        "name": "name",
+                                                        "type": "text",
+                                                        "label": "Name",
+                                                        "required": true
+                                                    },
+                                                    {
+                                                        "name": "description",
+                                                        "type": "text",
+                                                        "label": "Description"
+                                                    },
+                                                    {
+                                                        "name": "price",
+                                                        "type": "number",
+                                                        "label": "Price",
+                                                        "required": true
+                                                    },
+                                                    {
+                                                        "name": "qty",
+                                                        "type": "number",
+                                                        "label": "Quantity",
+                                                        "required": true
+                                                    },
+                                                    {
+                                                        "name": "tax",
+                                                        "type": "number",
+                                                        "label": "Tax Percentage",
+                                                        "validate": {
+                                                            "max": 100,
+                                                            "min": 0
+                                                        }
+                                                    },
+                                                    {
+                                                        "name": "discount",
+                                                        "type": "number",
+                                                        "label": "Discount Percentage",
+                                                        "validate": {
+                                                            "max": 100,
+                                                            "min": 0
+                                                        }
+                                                    }
+                                                ],
+                                                "type": "collection",
+                                                "label": "Data"
+                                            },
+                                            {
+                                                "name": "custom_fields",
+                                                "spec": [
+                                                    {
+                                                        "name": "key",
+                                                        "type": "text",
+                                                        "label": "Key",
+                                                        "required": true
+                                                    },
+                                                    {
+                                                        "name": "value",
+                                                        "type": "text",
+                                                        "label": "Value",
+                                                        "required": true
+                                                    }
+                                                ],
+                                                "type": "array",
+                                                "label": "Custom Fields"
+                                            }
+                                        ],
+                                        "type": "array",
+                                        "label": "Section Rows",
+                                        "required": true
+                                    }
+                                ],
+                                "type": "array",
+                                "label": "Sections",
+                                "required": true
+                            }
+                        ],
+                        "type": "array",
+                        "label": "Products"
+                    }
+                ]
+            }
+        }
+    ],
+    "metadata": {
+        "instant": false,
+        "version": 1,
+        "scenario": {
+            "roundtrips": 1,
+            "maxErrors": 3,
+            "autoCommit": true,
+            "autoCommitTriggerLast": true,
+            "sequential": false,
+            "slots": null,
+            "confidential": false,
+            "dataloss": false,
+            "dlq": false,
+            "freshVariables": false
+        },
+        "designer": {
+            "orphans": []
+        },
+        "zone": "us1.make.com"
+    }
+}
