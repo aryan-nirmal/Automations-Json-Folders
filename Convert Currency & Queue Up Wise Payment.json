@@ -1,0 +1,836 @@
+{
+    "name": "Convert Currency & Queue Up Wise Payment",
+    "flow": [
+        {
+            "id": 13,
+            "module": "util:SetVariable2",
+            "version": 1,
+            "metadata": {
+                "designer": {
+                    "x": -1054,
+                    "y": 64,
+                    "name": "PandaDoc Trigger Goes Here"
+                }
+            }
+        },
+        {
+            "id": 1,
+            "module": "pandadoc:getADocument",
+            "version": 1,
+            "parameters": {
+                "__IMTCONN__": 409238
+            },
+            "mapper": {
+                "document": "{{13.id}}"
+            },
+            "metadata": {
+                "designer": {
+                    "x": -753,
+                    "y": 64,
+                    "name": "Get Invoice Details"
+                },
+                "restore": {
+                    "parameters": {
+                        "__IMTCONN__": {
+                            "label": "1SecondCopy (info@1secondcopy.com)",
+                            "data": {
+                                "scoped": "true",
+                                "connection": "pandadoc"
+                            }
+                        }
+                    },
+                    "expect": {
+                        "document": {
+                            "mode": "edit"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "__IMTCONN__",
+                        "type": "account:pandadoc",
+                        "label": "Connection",
+                        "required": true
+                    }
+                ],
+                "expect": [
+                    {
+                        "name": "document",
+                        "type": "select",
+                        "label": "Document ID",
+                        "mode": "edit",
+                        "required": true
+                    }
+                ]
+            }
+        },
+        {
+            "id": 3,
+            "module": "airtable:ActionSearchRecords",
+            "version": 3,
+            "parameters": {
+                "__IMTCONN__": 2096600
+            },
+            "mapper": {
+                "base": "appDJ2u870Uaf2St6",
+                "table": "tblfL79s90pGo5KyR",
+                "formula": "{Email}='{{get(map(1.recipients; \"email\"; \"role\"; \"Client\"); 1)}}'",
+                "maxRecords": "1",
+                "useColumnId": false
+            },
+            "metadata": {
+                "designer": {
+                    "x": -449,
+                    "y": 69,
+                    "name": "Find Team Member"
+                },
+                "restore": {
+                    "expect": {
+                        "base": {
+                            "mode": "chose",
+                            "label": "Team Members"
+                        },
+                        "sort": {
+                            "mode": "chose"
+                        },
+                        "view": {
+                            "mode": "chose"
+                        },
+                        "table": {
+                            "mode": "chose",
+                            "label": "Team Members"
+                        },
+                        "fields": {
+                            "mode": "chose"
+                        },
+                        "useColumnId": {
+                            "mode": "chose"
+                        }
+                    },
+                    "parameters": {
+                        "__IMTCONN__": {
+                            "data": {
+                                "scoped": "true",
+                                "connection": "airtable3"
+                            },
+                            "label": "1SecondCopy (OAuth) (User ID: usr7neVwdTNpbHNMh)"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "__IMTCONN__",
+                        "type": "account:airtable3,airtable2",
+                        "label": "Connection",
+                        "required": true
+                    }
+                ],
+                "expect": [
+                    {
+                        "name": "base",
+                        "type": "select",
+                        "label": "Base",
+                        "required": true
+                    },
+                    {
+                        "name": "useColumnId",
+                        "type": "boolean",
+                        "label": "Use Column ID",
+                        "required": true
+                    },
+                    {
+                        "name": "table",
+                        "type": "select",
+                        "label": "Table",
+                        "required": true
+                    },
+                    {
+                        "name": "formula",
+                        "type": "text",
+                        "label": "Formula"
+                    },
+                    {
+                        "name": "maxRecords",
+                        "type": "integer",
+                        "label": "Limit"
+                    },
+                    {
+                        "name": "sort",
+                        "spec": [
+                            {
+                                "name": "field",
+                                "type": "select",
+                                "label": "Field",
+                                "dynamic": true,
+                                "options": []
+                            },
+                            {
+                                "name": "direction",
+                                "type": "select",
+                                "label": "Direction",
+                                "options": [
+                                    {
+                                        "label": "Descending",
+                                        "value": "desc"
+                                    },
+                                    {
+                                        "label": "Ascending",
+                                        "value": "asc"
+                                    }
+                                ]
+                            }
+                        ],
+                        "type": "array",
+                        "label": "Sort"
+                    },
+                    {
+                        "name": "view",
+                        "type": "select",
+                        "label": "View"
+                    },
+                    {
+                        "name": "fields",
+                        "type": "select",
+                        "label": "Output Fields",
+                        "multiple": true
+                    },
+                    {
+                        "name": "base",
+                        "type": "select",
+                        "label": "Base",
+                        "required": true
+                    },
+                    {
+                        "name": "useColumnId",
+                        "type": "boolean",
+                        "label": "Use Column ID",
+                        "required": true
+                    },
+                    {
+                        "name": "table",
+                        "type": "select",
+                        "label": "Table",
+                        "required": true
+                    },
+                    {
+                        "name": "formula",
+                        "type": "text",
+                        "label": "Formula"
+                    },
+                    {
+                        "name": "maxRecords",
+                        "type": "integer",
+                        "label": "Limit"
+                    },
+                    {
+                        "name": "sort",
+                        "spec": [
+                            {
+                                "name": "field",
+                                "type": "select",
+                                "label": "Field",
+                                "dynamic": true,
+                                "options": []
+                            },
+                            {
+                                "name": "direction",
+                                "type": "select",
+                                "label": "Direction",
+                                "options": [
+                                    {
+                                        "label": "Descending",
+                                        "value": "desc"
+                                    },
+                                    {
+                                        "label": "Ascending",
+                                        "value": "asc"
+                                    }
+                                ]
+                            }
+                        ],
+                        "type": "array",
+                        "label": "Sort"
+                    },
+                    {
+                        "name": "view",
+                        "type": "select",
+                        "label": "View"
+                    },
+                    {
+                        "name": "fields",
+                        "type": "select",
+                        "label": "Output Fields",
+                        "multiple": true
+                    }
+                ],
+                "interface": [
+                    {
+                        "name": "__IMTLENGTH__",
+                        "label": "Total number of bundles",
+                        "type": "uinteger"
+                    },
+                    {
+                        "name": "__IMTINDEX__",
+                        "label": "Bundle order position",
+                        "type": "uinteger"
+                    },
+                    {
+                        "name": "id",
+                        "type": "text",
+                        "label": "ID"
+                    },
+                    {
+                        "name": "createdTime",
+                        "type": "date",
+                        "label": "Created Time"
+                    },
+                    {
+                        "name": "Name",
+                        "type": "text",
+                        "label": "Name"
+                    },
+                    {
+                        "name": "Wise Account ID",
+                        "type": "text",
+                        "label": "Wise Account ID"
+                    },
+                    {
+                        "name": "Email",
+                        "type": "text",
+                        "label": "Email"
+                    },
+                    {
+                        "name": "Phone",
+                        "type": "text",
+                        "label": "Phone"
+                    },
+                    {
+                        "name": "Hourly Rate (USD)",
+                        "type": "number",
+                        "label": "Hourly Rate (USD)"
+                    },
+                    {
+                        "name": "Currency",
+                        "type": "text",
+                        "label": "Currency"
+                    },
+                    {
+                        "name": "Country",
+                        "type": "text",
+                        "label": "Country"
+                    },
+                    {
+                        "name": "Timezone",
+                        "type": "text",
+                        "label": "Timezone"
+                    },
+                    {
+                        "name": "Payment Type",
+                        "type": "text",
+                        "label": "Payment Type"
+                    },
+                    {
+                        "name": "Date Created",
+                        "time": false,
+                        "type": "date",
+                        "label": "Date Created"
+                    }
+                ]
+            }
+        },
+        {
+            "id": 5,
+            "module": "util:Switcher",
+            "version": 1,
+            "parameters": {},
+            "filter": {
+                "name": "Results == 1",
+                "conditions": [
+                    [
+                        {
+                            "a": "{{8.`__IMTLENGTH__`}}",
+                            "o": "number:equal",
+                            "b": "1"
+                        },
+                        {
+                            "a": "{{get(map(1.recipients; \"email\"; \"role\"; \"Client\"); 1)}}",
+                            "o": "exist"
+                        }
+                    ]
+                ]
+            },
+            "mapper": {
+                "input": "{{3.Currency}}",
+                "casesTable": [
+                    {
+                        "output": "CAD",
+                        "pattern": "CAD"
+                    },
+                    {
+                        "output": "USD",
+                        "pattern": "USD"
+                    },
+                    {
+                        "output": "USD",
+                        "pattern": "PHP"
+                    },
+                    {
+                        "output": "USD",
+                        "pattern": "GBP"
+                    },
+                    {
+                        "output": "USD",
+                        "pattern": "AUD"
+                    }
+                ],
+                "elseOutput": "",
+                "useRegExpMatch": false
+            },
+            "metadata": {
+                "designer": {
+                    "x": -119,
+                    "y": 67,
+                    "name": "Switch payIn Balance"
+                },
+                "restore": {
+                    "expect": {
+                        "casesTable": {
+                            "mode": "chose",
+                            "items": [
+                                null,
+                                null,
+                                null,
+                                null,
+                                null
+                            ]
+                        }
+                    }
+                },
+                "expect": [
+                    {
+                        "name": "input",
+                        "type": "text",
+                        "label": "Input"
+                    },
+                    {
+                        "name": "useRegExpMatch",
+                        "type": "boolean",
+                        "label": "Use regular expressions to match",
+                        "required": true
+                    },
+                    {
+                        "name": "casesTable",
+                        "spec": [
+                            {
+                                "name": "pattern",
+                                "type": "text",
+                                "label": "Pattern"
+                            },
+                            {
+                                "name": "output",
+                                "type": "any",
+                                "label": "Output"
+                            }
+                        ],
+                        "type": "array",
+                        "label": "Cases",
+                        "required": true
+                    },
+                    {
+                        "name": "elseOutput",
+                        "type": "any",
+                        "label": "Else"
+                    }
+                ]
+            }
+        },
+        {
+            "id": 6,
+            "module": "app#wise-1ynebj:listBalanceAccounts",
+            "version": 1,
+            "parameters": {
+                "__IMTCONN__": 494346
+            },
+            "filter": {
+                "name": "else = false",
+                "conditions": [
+                    [
+                        {
+                            "a": "{{5.isElse}}",
+                            "o": "boolean:equal",
+                            "b": "{{false}}"
+                        }
+                    ]
+                ]
+            },
+            "mapper": {
+                "user": 25217839,
+                "accountType": "STANDARD"
+            },
+            "metadata": {
+                "designer": {
+                    "x": 234,
+                    "y": 68,
+                    "name": "List Balance Accounts"
+                },
+                "restore": {
+                    "expect": {
+                        "user": {
+                            "mode": "chose",
+                            "label": "1SECONDCOPY"
+                        },
+                        "accountType": {
+                            "mode": "chose",
+                            "label": "Standard"
+                        }
+                    },
+                    "parameters": {
+                        "__IMTCONN__": {
+                            "data": {
+                                "scoped": "true",
+                                "connection": "app#wise-1ynebj2"
+                            },
+                            "label": "1SecondCopy"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "__IMTCONN__",
+                        "type": "account:app#wise-1ynebj2",
+                        "label": "Connection",
+                        "required": true
+                    }
+                ],
+                "expect": [
+                    {
+                        "name": "user",
+                        "type": "select",
+                        "label": "User"
+                    },
+                    {
+                        "name": "accountType",
+                        "type": "select",
+                        "label": "Account Type",
+                        "validate": {
+                            "enum": [
+                                "STANDARD",
+                                "SAVINGS"
+                            ]
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "id": 8,
+            "module": "currency:ActionConvert",
+            "version": 1,
+            "parameters": {},
+            "filter": {
+                "name": "Switch currency",
+                "conditions": [
+                    [
+                        {
+                            "a": "{{6.currency}}",
+                            "o": "text:equal:ci",
+                            "b": "{{5.output}}"
+                        }
+                    ]
+                ]
+            },
+            "mapper": {
+                "amount": "{{1.pricing.total}}",
+                "inputCurrency": "USD",
+                "outputCurrency": "{{3.Currency}}"
+            },
+            "metadata": {
+                "designer": {
+                    "x": 713,
+                    "y": 64,
+                    "name": "Convert Currency"
+                },
+                "restore": {
+                    "expect": {
+                        "inputCurrency": {
+                            "mode": "chose",
+                            "label": "United States dollar (USD)"
+                        },
+                        "outputCurrency": {
+                            "mode": "edit"
+                        }
+                    }
+                },
+                "expect": [
+                    {
+                        "name": "amount",
+                        "type": "number",
+                        "label": "Amount",
+                        "required": true
+                    },
+                    {
+                        "name": "inputCurrency",
+                        "type": "select",
+                        "label": "Input currency",
+                        "required": true,
+                        "validate": {
+                            "enum": [
+                                "EUR",
+                                "USD",
+                                "JPY",
+                                "BGN",
+                                "CZK",
+                                "DKK",
+                                "GBP",
+                                "HUF",
+                                "PLN",
+                                "RON",
+                                "SEK",
+                                "CHF",
+                                "NOK",
+                                "HRK",
+                                "RUB",
+                                "TRY",
+                                "AUD",
+                                "BRL",
+                                "CAD",
+                                "CNY",
+                                "HKD",
+                                "IDR",
+                                "ILS",
+                                "INR",
+                                "KRW",
+                                "MXN",
+                                "MYR",
+                                "NZD",
+                                "PHP",
+                                "SGD",
+                                "THB",
+                                "ZAR"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "outputCurrency",
+                        "type": "select",
+                        "label": "Output currency",
+                        "required": true,
+                        "validate": {
+                            "enum": [
+                                "EUR",
+                                "USD",
+                                "JPY",
+                                "BGN",
+                                "CZK",
+                                "DKK",
+                                "GBP",
+                                "HUF",
+                                "PLN",
+                                "RON",
+                                "SEK",
+                                "CHF",
+                                "NOK",
+                                "HRK",
+                                "RUB",
+                                "TRY",
+                                "AUD",
+                                "BRL",
+                                "CAD",
+                                "CNY",
+                                "HKD",
+                                "IDR",
+                                "ILS",
+                                "INR",
+                                "KRW",
+                                "MXN",
+                                "MYR",
+                                "NZD",
+                                "PHP",
+                                "SGD",
+                                "THB",
+                                "ZAR"
+                            ]
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "id": 9,
+            "module": "app#wise-1ynebj:createQuote",
+            "version": 1,
+            "parameters": {
+                "__IMTCONN__": 494346
+            },
+            "mapper": {
+                "user": 25217839,
+                "targetAmount": "{{8.amount}}",
+                "targetAccount": "{{3.`Wise Account ID`}}",
+                "sourceCurrency": "{{5.output}}",
+                "targetCurrency": "{{3.Currency}}"
+            },
+            "metadata": {
+                "designer": {
+                    "x": 1015,
+                    "y": 62,
+                    "name": "Create Quote"
+                },
+                "restore": {
+                    "expect": {
+                        "user": {
+                            "mode": "chose",
+                            "label": "1SECONDCOPY"
+                        },
+                        "targetAccount": {
+                            "mode": "edit"
+                        },
+                        "sourceCurrency": {
+                            "mode": "edit"
+                        },
+                        "targetCurrency": {
+                            "mode": "edit"
+                        }
+                    },
+                    "parameters": {
+                        "__IMTCONN__": {
+                            "data": {
+                                "scoped": "true",
+                                "connection": "app#wise-1ynebj2"
+                            },
+                            "label": "1SecondCopy"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "__IMTCONN__",
+                        "type": "account:app#wise-1ynebj2",
+                        "label": "Connection",
+                        "required": true
+                    }
+                ],
+                "expect": [
+                    {
+                        "name": "user",
+                        "type": "select",
+                        "label": "User"
+                    },
+                    {
+                        "name": "sourceCurrency",
+                        "type": "select",
+                        "label": "Source Currency"
+                    },
+                    {
+                        "name": "targetCurrency",
+                        "type": "select",
+                        "label": "Target Currency"
+                    },
+                    {
+                        "name": "sourceAmount",
+                        "type": "number",
+                        "label": "Source Amount"
+                    },
+                    {
+                        "name": "targetAmount",
+                        "type": "number",
+                        "label": "Target Amount"
+                    },
+                    {
+                        "name": "targetAccount",
+                        "type": "select",
+                        "label": "Target Account"
+                    }
+                ]
+            }
+        },
+        {
+            "id": 11,
+            "module": "app#wise-1ynebj:createTransfer",
+            "version": 1,
+            "parameters": {
+                "__IMTCONN__": 494346
+            },
+            "mapper": {
+                "quoteUuid": "{{9.id}}",
+                "targetAccount": "{{3.`Wise Account ID`}}",
+                "transferReference": "1SecondCopy Payroll",
+                "customerTransactionId": "{{uuid}}"
+            },
+            "metadata": {
+                "designer": {
+                    "x": 1294,
+                    "y": 60,
+                    "name": "Create Transfer"
+                },
+                "restore": {
+                    "expect": {
+                        "targetAccount": {
+                            "mode": "edit"
+                        }
+                    },
+                    "parameters": {
+                        "__IMTCONN__": {
+                            "data": {
+                                "scoped": "true",
+                                "connection": "app#wise-1ynebj2"
+                            },
+                            "label": "1SecondCopy"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "__IMTCONN__",
+                        "type": "account:app#wise-1ynebj2",
+                        "label": "Connection",
+                        "required": true
+                    }
+                ],
+                "expect": [
+                    {
+                        "name": "quoteUuid",
+                        "type": "text",
+                        "label": "Quote Uuid",
+                        "required": true
+                    },
+                    {
+                        "name": "targetAccount",
+                        "type": "select",
+                        "label": "Target Account"
+                    },
+                    {
+                        "name": "customerTransactionId",
+                        "type": "uuid",
+                        "label": "Customer Transaction ID"
+                    },
+                    {
+                        "name": "transferReference",
+                        "type": "text",
+                        "label": "Transfer Reference",
+                        "required": true
+                    }
+                ]
+            }
+        }
+    ],
+    "metadata": {
+        "instant": false,
+        "version": 1,
+        "scenario": {
+            "roundtrips": 1,
+            "maxErrors": 3,
+            "autoCommit": true,
+            "autoCommitTriggerLast": true,
+            "sequential": false,
+            "slots": null,
+            "confidential": false,
+            "dataloss": false,
+            "dlq": false,
+            "freshVariables": false
+        },
+        "designer": {
+            "orphans": []
+        },
+        "zone": "us1.make.com"
+    }
+}
