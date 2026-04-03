@@ -1,0 +1,1154 @@
+{
+    "name": "New Systems Audit Request -> Send Email",
+    "flow": [
+        {
+            "id": 1,
+            "module": "typeform:WatchEventsWithResponses",
+            "version": 2,
+            "parameters": {
+                "__IMTHOOK__": 1445553
+            },
+            "mapper": {},
+            "metadata": {
+                "designer": {
+                    "x": 0,
+                    "y": 0
+                },
+                "restore": {
+                    "parameters": {
+                        "__IMTHOOK__": {
+                            "data": {
+                                "editable": "true"
+                            },
+                            "label": "Audit Form"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "__IMTHOOK__",
+                        "type": "hook:typeform",
+                        "label": "Webhook",
+                        "required": true
+                    }
+                ],
+                "interface": [
+                    {
+                        "name": "form_id",
+                        "type": "text",
+                        "label": "Form ID"
+                    },
+                    {
+                        "name": "event",
+                        "spec": [
+                            {
+                                "name": "id",
+                                "type": "text",
+                                "label": "ID"
+                            },
+                            {
+                                "name": "type",
+                                "type": "text",
+                                "label": "Type"
+                            }
+                        ],
+                        "type": "collection",
+                        "label": "Event"
+                    },
+                    {
+                        "name": "token",
+                        "type": "text",
+                        "label": "Token"
+                    },
+                    {
+                        "name": "submitted_at",
+                        "type": "date",
+                        "label": "Submitted at"
+                    },
+                    {
+                        "name": "landed_at",
+                        "type": "date",
+                        "label": "Landed at"
+                    },
+                    {
+                        "name": "calculated",
+                        "spec": [
+                            {
+                                "name": "score",
+                                "type": "number",
+                                "label": "Score"
+                            }
+                        ],
+                        "type": "collection",
+                        "label": "Calculated"
+                    },
+                    {
+                        "name": "definition",
+                        "spec": [
+                            {
+                                "name": "id",
+                                "type": "text",
+                                "label": "ID"
+                            },
+                            {
+                                "name": "title",
+                                "type": "text",
+                                "label": "Title"
+                            },
+                            {
+                                "name": "fields",
+                                "spec": {
+                                    "spec": [
+                                        {
+                                            "name": "id",
+                                            "type": "text",
+                                            "label": "ID"
+                                        },
+                                        {
+                                            "name": "title",
+                                            "type": "text",
+                                            "label": "Title"
+                                        },
+                                        {
+                                            "name": "type",
+                                            "type": "text",
+                                            "label": "Type"
+                                        },
+                                        {
+                                            "name": "ref",
+                                            "type": "text",
+                                            "label": "Internal Name"
+                                        },
+                                        {
+                                            "name": "allow_multiple_selections",
+                                            "type": "boolean",
+                                            "label": "Allow Multiple Selections"
+                                        },
+                                        {
+                                            "name": "allow_other_choice",
+                                            "type": "boolean",
+                                            "label": "Allow Other Choice"
+                                        }
+                                    ],
+                                    "type": "collection"
+                                },
+                                "type": "array",
+                                "label": "Fields"
+                            }
+                        ],
+                        "type": "collection",
+                        "label": "Definition"
+                    },
+                    {
+                        "name": "answers",
+                        "spec": [
+                            {
+                                "name": "field",
+                                "spec": [
+                                    {
+                                        "name": "id",
+                                        "type": "text",
+                                        "label": "ID"
+                                    },
+                                    {
+                                        "name": "type",
+                                        "type": "text",
+                                        "label": "Type"
+                                    },
+                                    {
+                                        "name": "ref",
+                                        "type": "text",
+                                        "label": "Internal Name"
+                                    }
+                                ],
+                                "type": "collection",
+                                "label": "Field"
+                            },
+                            {
+                                "name": "type",
+                                "type": "text",
+                                "label": "Type"
+                            },
+                            {
+                                "name": "text",
+                                "type": "text",
+                                "label": "Text"
+                            },
+                            {
+                                "name": "email",
+                                "type": "email",
+                                "label": "Email"
+                            },
+                            {
+                                "name": "boolean",
+                                "type": "boolean",
+                                "label": "Boolean"
+                            },
+                            {
+                                "name": "number",
+                                "type": "number",
+                                "label": "Number"
+                            },
+                            {
+                                "name": "date",
+                                "type": "date",
+                                "label": "Date"
+                            },
+                            {
+                                "name": "long_text",
+                                "type": "text",
+                                "label": "Long Text"
+                            },
+                            {
+                                "name": "short_text",
+                                "type": "text",
+                                "label": "Short Text"
+                            },
+                            {
+                                "name": "file_url",
+                                "type": "url",
+                                "label": "File URL"
+                            },
+                            {
+                                "name": "url",
+                                "type": "url",
+                                "label": "URL"
+                            },
+                            {
+                                "name": "phone_number",
+                                "type": "text",
+                                "label": "Phone Number"
+                            },
+                            {
+                                "name": "choice",
+                                "spec": [
+                                    {
+                                        "name": "label",
+                                        "type": "text",
+                                        "label": "Label"
+                                    },
+                                    {
+                                        "name": "other",
+                                        "type": "text",
+                                        "label": "Other"
+                                    }
+                                ],
+                                "type": "collection",
+                                "label": "Choice"
+                            },
+                            {
+                                "name": "choices",
+                                "spec": [
+                                    {
+                                        "name": "labels",
+                                        "spec": {
+                                            "type": "text"
+                                        },
+                                        "type": "array",
+                                        "label": "Labels"
+                                    }
+                                ],
+                                "type": "collection",
+                                "label": "Choices"
+                            }
+                        ],
+                        "type": "array",
+                        "label": "Answers"
+                    },
+                    {
+                        "name": "mappable_answers",
+                        "spec": [
+                            {
+                                "name": "01GY78ZDF39DMSKGF4KD2YYACS",
+                                "type": "text",
+                                "label": "*What's your company called?*"
+                            },
+                            {
+                                "name": "9698cf35-be1c-451f-ad0d-d7908953e6c4",
+                                "type": "text",
+                                "label": "*Explain your business in 2 sentences. *"
+                            },
+                            {
+                                "name": "e77f4352-58a7-4d9b-a03c-7383959f2524",
+                                "type": "url",
+                                "label": "*What's your website URL?*"
+                            },
+                            {
+                                "name": "0f77f3a0-47e7-43e0-9603-2b545f90e020",
+                                "type": "text",
+                                "label": "*What's your monthly revenue (in USD)?*"
+                            },
+                            {
+                                "name": "65995a50-9c17-47f1-9c9f-036138097384",
+                                "type": "text",
+                                "label": "*What's the best way to get ahold of you?*"
+                            },
+                            {
+                                "name": "07e6ece1-ed7e-4dad-9685-e99da64fe6cc",
+                                "type": "text",
+                                "label": "*Tell us the intended focus of your audit.*"
+                            },
+                            {
+                                "name": "b12c6bcd-ec43-4eaf-91a3-6fe9b1ec2c22",
+                                "type": "collection",
+                                "label": "*Recruitment, Onboarding, & HR* (group)"
+                            },
+                            {
+                                "name": "450ea60b-b8ee-4543-abf4-59583c18b552",
+                                "type": "collection",
+                                "label": "*Sales & Marketing* (group)"
+                            },
+                            {
+                                "name": "5b56296b-1d85-41fd-89ad-8fb3ae1f7bed",
+                                "type": "collection",
+                                "label": "*Operations & Fulfillment* (group)"
+                            },
+                            {
+                                "name": "545959e5-a3f2-4324-aa18-843e9528e381",
+                                "type": "text",
+                                "label": "*How do you acquire new customers?*"
+                            },
+                            {
+                                "name": "109f8bde-6b91-43be-9504-a8b267990595",
+                                "type": "text",
+                                "label": "*How do you produce/fulfill your product/service?*"
+                            },
+                            {
+                                "name": "b031685a-7f84-4ee5-88df-940fcff3eaca",
+                                "type": "text",
+                                "label": "*What are you currently delegating to employees/VAs?*"
+                            },
+                            {
+                                "name": "635a2d22-3d3c-44ac-92f4-f6e338b11ffe",
+                                "type": "text",
+                                "label": "*Got anything extra you'd like to share before we wrap this up?*"
+                            },
+                            {
+                                "name": "9348d4a8-07d6-4188-9eab-7c53b82c10d6",
+                                "type": "text",
+                                "label": "*What are your biggest recruiting, onboarding, or HR issues? * / Parent Group: *Recruitment, Onboarding, & HR*"
+                            },
+                            {
+                                "name": "f0eec7c4-7d24-4ed7-a468-84a80f14f917",
+                                "type": "text",
+                                "label": "*What are your biggest sales & marketing problems? * / Parent Group: *Sales & Marketing*"
+                            },
+                            {
+                                "name": "f4c11b4a-1c76-43b3-9036-380394d854ee",
+                                "type": "text",
+                                "label": "*What are your biggest operations & fulfillment problems? * / Parent Group: *Operations & Fulfillment*"
+                            }
+                        ],
+                        "type": "collection",
+                        "label": "Mappable Answers"
+                    },
+                    {
+                        "name": "hidden",
+                        "spec": [],
+                        "type": "collection",
+                        "label": "Hidden"
+                    }
+                ]
+            }
+        },
+        {
+            "id": 2,
+            "module": "util:FunctionSleep",
+            "version": 1,
+            "parameters": {},
+            "mapper": {
+                "duration": "240"
+            },
+            "metadata": {
+                "designer": {
+                    "x": 300,
+                    "y": 0
+                },
+                "restore": {},
+                "expect": [
+                    {
+                        "name": "duration",
+                        "type": "uinteger",
+                        "label": "Delay",
+                        "required": true,
+                        "validate": {
+                            "max": 300,
+                            "min": 1
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "id": 3,
+            "module": "typeform:ListResponses",
+            "version": 2,
+            "parameters": {
+                "__IMTCONN__": 1134474
+            },
+            "mapper": {
+                "limit": "1",
+                "formId": "RlnRTagz",
+                "completed": true
+            },
+            "metadata": {
+                "designer": {
+                    "x": 600,
+                    "y": 0
+                },
+                "restore": {
+                    "expect": {
+                        "fields": {
+                            "mode": "chose"
+                        },
+                        "formId": {
+                            "mode": "chose",
+                            "label": "Systems Audit"
+                        },
+                        "completed": {
+                            "mode": "chose"
+                        },
+                        "excluded_response_ids": {
+                            "mode": "chose"
+                        },
+                        "included_response_ids": {
+                            "mode": "chose"
+                        }
+                    },
+                    "parameters": {
+                        "__IMTCONN__": {
+                            "data": {
+                                "scoped": "true",
+                                "connection": "typeform2"
+                            },
+                            "label": "info@leftclick.ai"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "__IMTCONN__",
+                        "type": "account:typeform2",
+                        "label": "Connection",
+                        "required": true
+                    }
+                ],
+                "expect": [
+                    {
+                        "name": "formId",
+                        "type": "select",
+                        "label": "Form ID",
+                        "required": true
+                    },
+                    {
+                        "name": "completed",
+                        "type": "boolean",
+                        "label": "Completed"
+                    },
+                    {
+                        "name": "query",
+                        "type": "text",
+                        "label": "Query"
+                    },
+                    {
+                        "name": "since",
+                        "type": "date",
+                        "label": "Since"
+                    },
+                    {
+                        "name": "until",
+                        "type": "date",
+                        "label": "Until"
+                    },
+                    {
+                        "name": "limit",
+                        "type": "uinteger",
+                        "label": "Limit"
+                    },
+                    {
+                        "name": "formId",
+                        "type": "select",
+                        "label": "Form ID",
+                        "required": true
+                    },
+                    {
+                        "name": "completed",
+                        "type": "boolean",
+                        "label": "Completed"
+                    },
+                    {
+                        "name": "query",
+                        "type": "text",
+                        "label": "Query"
+                    },
+                    {
+                        "name": "since",
+                        "type": "date",
+                        "label": "Since"
+                    },
+                    {
+                        "name": "until",
+                        "type": "date",
+                        "label": "Until"
+                    },
+                    {
+                        "name": "limit",
+                        "type": "uinteger",
+                        "label": "Limit"
+                    },
+                    {
+                        "name": "fields",
+                        "spec": {
+                            "name": "value",
+                            "type": "select",
+                            "dynamic": true,
+                            "options": [],
+                            "required": true
+                        },
+                        "type": "array",
+                        "label": "Fields"
+                    },
+                    {
+                        "name": "included_response_ids",
+                        "type": "select",
+                        "label": "Included Response IDs",
+                        "multiple": true
+                    },
+                    {
+                        "name": "excluded_response_ids",
+                        "type": "select",
+                        "label": "Excluded Response IDs",
+                        "multiple": true
+                    }
+                ],
+                "interface": [
+                    {
+                        "name": "__IMTLENGTH__",
+                        "type": "uinteger",
+                        "label": "Total number of bundles"
+                    },
+                    {
+                        "name": "__IMTINDEX__",
+                        "type": "uinteger",
+                        "label": "Bundle order position"
+                    },
+                    {
+                        "name": "landing_id",
+                        "type": "text",
+                        "label": "Landing ID"
+                    },
+                    {
+                        "name": "token",
+                        "type": "text",
+                        "label": "Token"
+                    },
+                    {
+                        "name": "response_id",
+                        "type": "text",
+                        "label": "Response ID"
+                    },
+                    {
+                        "name": "landed_at",
+                        "type": "date",
+                        "label": "Landed at"
+                    },
+                    {
+                        "name": "submitted_at",
+                        "type": "date",
+                        "label": "Submitted at"
+                    },
+                    {
+                        "name": "metadata",
+                        "spec": [
+                            {
+                                "name": "user_agent",
+                                "type": "text",
+                                "label": "User Agent"
+                            },
+                            {
+                                "name": "platform",
+                                "type": "text",
+                                "label": "Platform"
+                            },
+                            {
+                                "name": "referer",
+                                "type": "url",
+                                "label": "Referer"
+                            },
+                            {
+                                "name": "network_id",
+                                "type": "text",
+                                "label": "Network ID"
+                            },
+                            {
+                                "name": "browser",
+                                "type": "text",
+                                "label": "Browser"
+                            }
+                        ],
+                        "type": "collection",
+                        "label": "Metadata"
+                    },
+                    {
+                        "name": "answers",
+                        "spec": [
+                            {
+                                "name": "field",
+                                "spec": [
+                                    {
+                                        "name": "id",
+                                        "type": "text",
+                                        "label": "ID"
+                                    },
+                                    {
+                                        "name": "type",
+                                        "type": "text",
+                                        "label": "Type"
+                                    },
+                                    {
+                                        "name": "ref",
+                                        "type": "text",
+                                        "label": "Readable Name"
+                                    }
+                                ],
+                                "type": "collection",
+                                "label": "Field"
+                            },
+                            {
+                                "name": "type",
+                                "type": "text",
+                                "label": "Type"
+                            },
+                            {
+                                "name": "text",
+                                "type": "text",
+                                "label": "Text"
+                            },
+                            {
+                                "name": "email",
+                                "type": "email",
+                                "label": "Email"
+                            },
+                            {
+                                "name": "boolean",
+                                "type": "boolean",
+                                "label": "Boolean"
+                            },
+                            {
+                                "name": "number",
+                                "type": "number",
+                                "label": "Number"
+                            },
+                            {
+                                "name": "date",
+                                "type": "date",
+                                "label": "Date"
+                            },
+                            {
+                                "name": "long_text",
+                                "type": "text",
+                                "label": "Long Text"
+                            },
+                            {
+                                "name": "short_text",
+                                "type": "text",
+                                "label": "Short Text"
+                            },
+                            {
+                                "name": "file_url",
+                                "type": "url",
+                                "label": "File URL"
+                            },
+                            {
+                                "name": "url",
+                                "type": "url",
+                                "label": "URL"
+                            },
+                            {
+                                "name": "phone_number",
+                                "type": "text",
+                                "label": "Phone Number"
+                            },
+                            {
+                                "name": "choice",
+                                "spec": [
+                                    {
+                                        "name": "label",
+                                        "type": "text",
+                                        "label": "Label"
+                                    },
+                                    {
+                                        "name": "other",
+                                        "type": "text",
+                                        "label": "Other"
+                                    }
+                                ],
+                                "type": "collection",
+                                "label": "Choice"
+                            },
+                            {
+                                "name": "choices",
+                                "spec": [
+                                    {
+                                        "name": "labels",
+                                        "spec": {
+                                            "type": "text"
+                                        },
+                                        "type": "array",
+                                        "label": "Labels"
+                                    }
+                                ],
+                                "type": "collection",
+                                "label": "Choices"
+                            }
+                        ],
+                        "type": "array",
+                        "label": "Answers"
+                    },
+                    {
+                        "name": "mappable_answers",
+                        "spec": [
+                            {
+                                "name": "01GY78ZDF39DMSKGF4KD2YYACS",
+                                "type": "text",
+                                "label": "*What's your company called?*"
+                            },
+                            {
+                                "name": "9698cf35-be1c-451f-ad0d-d7908953e6c4",
+                                "type": "text",
+                                "label": "*Explain your business in 2 sentences. *"
+                            },
+                            {
+                                "name": "e77f4352-58a7-4d9b-a03c-7383959f2524",
+                                "type": "url",
+                                "label": "*What's your website URL?*"
+                            },
+                            {
+                                "name": "0f77f3a0-47e7-43e0-9603-2b545f90e020",
+                                "type": "text",
+                                "label": "*What's your monthly revenue (in USD)?*"
+                            },
+                            {
+                                "name": "65995a50-9c17-47f1-9c9f-036138097384",
+                                "type": "text",
+                                "label": "*What's the best way to get ahold of you?*"
+                            },
+                            {
+                                "name": "07e6ece1-ed7e-4dad-9685-e99da64fe6cc",
+                                "type": "text",
+                                "label": "*Tell us the intended focus of your audit.*"
+                            },
+                            {
+                                "name": "b12c6bcd-ec43-4eaf-91a3-6fe9b1ec2c22",
+                                "type": "collection",
+                                "label": "*Recruitment, Onboarding, & HR* (group)"
+                            },
+                            {
+                                "name": "450ea60b-b8ee-4543-abf4-59583c18b552",
+                                "type": "collection",
+                                "label": "*Sales & Marketing* (group)"
+                            },
+                            {
+                                "name": "5b56296b-1d85-41fd-89ad-8fb3ae1f7bed",
+                                "type": "collection",
+                                "label": "*Operations & Fulfillment* (group)"
+                            },
+                            {
+                                "name": "545959e5-a3f2-4324-aa18-843e9528e381",
+                                "type": "text",
+                                "label": "*How do you acquire new customers?*"
+                            },
+                            {
+                                "name": "109f8bde-6b91-43be-9504-a8b267990595",
+                                "type": "text",
+                                "label": "*How do you produce/fulfill your product/service?*"
+                            },
+                            {
+                                "name": "b031685a-7f84-4ee5-88df-940fcff3eaca",
+                                "type": "text",
+                                "label": "*What are you currently delegating to employees/VAs?*"
+                            },
+                            {
+                                "name": "635a2d22-3d3c-44ac-92f4-f6e338b11ffe",
+                                "type": "text",
+                                "label": "*Got anything extra you'd like to share before we wrap this up?*"
+                            },
+                            {
+                                "name": "9348d4a8-07d6-4188-9eab-7c53b82c10d6",
+                                "type": "text",
+                                "label": "*What are your biggest recruiting, onboarding, or HR issues? * / Parent Group: *Recruitment, Onboarding, & HR*"
+                            },
+                            {
+                                "name": "f0eec7c4-7d24-4ed7-a468-84a80f14f917",
+                                "type": "text",
+                                "label": "*What are your biggest sales & marketing problems? * / Parent Group: *Sales & Marketing*"
+                            },
+                            {
+                                "name": "f4c11b4a-1c76-43b3-9036-380394d854ee",
+                                "type": "text",
+                                "label": "*What are your biggest operations & fulfillment problems? * / Parent Group: *Operations & Fulfillment*"
+                            }
+                        ],
+                        "type": "collection",
+                        "label": "Mappable Answers"
+                    },
+                    {
+                        "name": "hidden",
+                        "spec": [],
+                        "type": "collection",
+                        "label": "Hidden"
+                    },
+                    {
+                        "name": "calculated",
+                        "spec": [
+                            {
+                                "name": "score",
+                                "type": "number",
+                                "label": "Score"
+                            }
+                        ],
+                        "type": "collection",
+                        "label": "Calculated"
+                    }
+                ]
+            }
+        },
+        {
+            "id": 6,
+            "module": "util:SetVariables",
+            "version": 1,
+            "parameters": {},
+            "mapper": {
+                "scope": "roundtrip",
+                "variables": [
+                    {
+                        "name": "dateTime",
+                        "value": "{{formatDate(addMinutes(3.submitted_at; 3); \"ddd MMM D \\a\\t h:mm A\")}}"
+                    }
+                ]
+            },
+            "metadata": {
+                "designer": {
+                    "x": 900,
+                    "y": 0,
+                    "name": "Set Formatted Datetime"
+                },
+                "restore": {
+                    "expect": {
+                        "scope": {
+                            "label": "One cycle"
+                        },
+                        "variables": {
+                            "items": [
+                                null
+                            ]
+                        }
+                    }
+                },
+                "expect": [
+                    {
+                        "name": "variables",
+                        "spec": [
+                            {
+                                "name": "name",
+                                "type": "text",
+                                "label": "Variable name",
+                                "required": true
+                            },
+                            {
+                                "name": "value",
+                                "type": "any",
+                                "label": "Variable value"
+                            }
+                        ],
+                        "type": "array",
+                        "label": "Variables"
+                    },
+                    {
+                        "name": "scope",
+                        "type": "select",
+                        "label": "Variable lifetime",
+                        "required": true,
+                        "validate": {
+                            "enum": [
+                                "roundtrip",
+                                "execution"
+                            ]
+                        }
+                    }
+                ],
+                "interface": [
+                    {
+                        "name": "dateTime",
+                        "type": "any",
+                        "label": "dateTime"
+                    }
+                ]
+            }
+        },
+        {
+            "id": 5,
+            "module": "email:ActionSendEmail",
+            "version": 7,
+            "parameters": {
+                "account": 2166140,
+                "saveAfterSent": false
+            },
+            "mapper": {
+                "to": [
+                    "nick@leftclick.ai",
+                    "{{3.mappable_answers.`28bbe528-c002-4f1a-930f-bea1c56b9f81`}}"
+                ],
+                "subject": "Re: new request from {{3.mappable_answers.`01GY78ZDF39DMSKGF4KD2YYACS`}}",
+                "contentType": "text",
+                "attachments": [],
+                "cc": [],
+                "bcc": [],
+                "from": "",
+                "sender": "",
+                "replyTo": "example@example-referral-person.com",
+                "inReplyTo": "",
+                "references": [],
+                "priority": "normal",
+                "headers": [],
+                "text": "Hi {{3.mappable_answers.`618a7bdf-a897-4adb-9fa5-70a02f89a262`}},\n\nNick asked me to reach out to you—we just got your audit request a moment ago for {{3.mappable_answers.`01GY78ZDF39DMSKGF4KD2YYACS`}}. I’m Example, his automation partner, and I do all of our audits & scoping.\n\nI'm going to spend half an hour later today going over your submission and putting something together before our call. Just wanted to say I'm looking forward to meeting you and learning a little more about {{3.mappable_answers.`01GY78ZDF39DMSKGF4KD2YYACS`}}.\n\nTalk soon,\nExample\n\n---------- Forwarded message ---------\nFrom: Nick Saraev <nick@leftclick.ai>\nDate: {{6.dateTime}}\nSubject: New build request for {{3.mappable_answers.`01GY78ZDF39DMSKGF4KD2YYACS`}}\nTo: Example Name <example@example.com>\n\nHey Example,\n\nJust following up. {{3.mappable_answers.`618a7bdf-a897-4adb-9fa5-70a02f89a262`}} from {{3.mappable_answers.`01GY78ZDF39DMSKGF4KD2YYACS`}} filled out a build request form a moment ago but as you know I'm slammed. You are incredible at these—do you mind checking in with them and saying hi?\n\nIf they end up needing automation help I'll give everything a look over before you start working together.\n\nThanks,\nNick"
+            },
+            "metadata": {
+                "designer": {
+                    "x": 1208,
+                    "y": -4,
+                    "name": "Smart Referral"
+                },
+                "restore": {
+                    "parameters": {
+                        "account": {
+                            "label": "nick@leftclick.ai (Feb 15 2024) (nick@leftclick.ai)",
+                            "data": {
+                                "scoped": "true",
+                                "connection": "google-restricted"
+                            }
+                        },
+                        "saveAfterSent": {
+                            "label": "No"
+                        }
+                    },
+                    "expect": {
+                        "to": {
+                            "mode": "chose",
+                            "items": [
+                                null,
+                                null
+                            ]
+                        },
+                        "contentType": {
+                            "label": "Plaintext"
+                        },
+                        "attachments": {
+                            "mode": "chose"
+                        },
+                        "cc": {
+                            "mode": "chose"
+                        },
+                        "bcc": {
+                            "mode": "chose"
+                        },
+                        "references": {
+                            "mode": "chose"
+                        },
+                        "priority": {
+                            "label": "Normal"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "account",
+                        "type": "account:smtp,google-restricted,microsoft-smtp-imap",
+                        "label": "Connection",
+                        "required": true
+                    },
+                    {
+                        "name": "saveAfterSent",
+                        "type": "select",
+                        "label": "Save message after sending",
+                        "required": true,
+                        "validate": {
+                            "enum": [
+                                true,
+                                false
+                            ]
+                        }
+                    },
+                    {
+                        "type": "hidden"
+                    }
+                ],
+                "expect": [
+                    {
+                        "name": "to",
+                        "type": "array",
+                        "label": "To",
+                        "required": true,
+                        "spec": {
+                            "name": "value",
+                            "type": "email",
+                            "label": "Email address",
+                            "required": true
+                        }
+                    },
+                    {
+                        "name": "subject",
+                        "type": "text",
+                        "label": "Subject"
+                    },
+                    {
+                        "name": "contentType",
+                        "type": "select",
+                        "label": "Content Type",
+                        "required": true,
+                        "validate": {
+                            "enum": [
+                                "html",
+                                "text"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "attachments",
+                        "type": "array",
+                        "label": "Attachments",
+                        "spec": [
+                            {
+                                "name": "fileName",
+                                "label": "File name",
+                                "type": "filename",
+                                "required": true,
+                                "semantic": "file:name"
+                            },
+                            {
+                                "name": "data",
+                                "label": "Data",
+                                "type": "buffer",
+                                "required": true,
+                                "semantic": "file:data"
+                            },
+                            {
+                                "name": "cid",
+                                "label": "Content-ID",
+                                "type": "text"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "cc",
+                        "type": "array",
+                        "label": "Copy recipient",
+                        "spec": {
+                            "name": "value",
+                            "type": "email",
+                            "label": "Email address"
+                        }
+                    },
+                    {
+                        "name": "bcc",
+                        "type": "array",
+                        "label": "Blind copy recipient",
+                        "spec": {
+                            "name": "value",
+                            "type": "email",
+                            "label": "Email address"
+                        }
+                    },
+                    {
+                        "name": "from",
+                        "type": "text",
+                        "label": "From"
+                    },
+                    {
+                        "name": "sender",
+                        "type": "text",
+                        "label": "Sender"
+                    },
+                    {
+                        "name": "replyTo",
+                        "type": "text",
+                        "label": "Reply-To"
+                    },
+                    {
+                        "name": "inReplyTo",
+                        "type": "text",
+                        "label": "In-Reply-To"
+                    },
+                    {
+                        "name": "references",
+                        "type": "array",
+                        "label": "References",
+                        "spec": {
+                            "type": "text",
+                            "label": "Reference",
+                            "required": true,
+                            "name": "value"
+                        }
+                    },
+                    {
+                        "name": "priority",
+                        "type": "select",
+                        "label": "Priority",
+                        "validate": {
+                            "enum": [
+                                "high",
+                                "normal",
+                                "low"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "headers",
+                        "type": "array",
+                        "label": "Headers",
+                        "spec": [
+                            {
+                                "name": "key",
+                                "label": "Key",
+                                "type": "text",
+                                "required": true
+                            },
+                            {
+                                "name": "value",
+                                "label": "Value",
+                                "type": "text",
+                                "required": true
+                            }
+                        ]
+                    },
+                    {
+                        "name": "text",
+                        "type": "text",
+                        "label": "Content"
+                    }
+                ],
+                "advanced": true
+            }
+        }
+    ],
+    "metadata": {
+        "instant": true,
+        "version": 1,
+        "scenario": {
+            "roundtrips": 1,
+            "maxErrors": 3,
+            "autoCommit": true,
+            "autoCommitTriggerLast": true,
+            "sequential": false,
+            "slots": null,
+            "confidential": false,
+            "dataloss": false,
+            "dlq": false,
+            "freshVariables": false
+        },
+        "designer": {
+            "orphans": []
+        },
+        "zone": "us1.make.com"
+    }
+}
